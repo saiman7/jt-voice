@@ -1,0 +1,180 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  background: #0f1419;
+  color: #e7ecf3;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.panel {
+  width: min(480px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b98a8;
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  color: #8b98a8;
+}
+
+.mic-section {
+  text-align: center;
+}
+
+.mic-btn {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #2d3848;
+  background: #1a2332;
+  color: #e7ecf3;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0 auto;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.mic-btn:hover {
+  border-color: #4a90d9;
+}
+
+.mic-btn.active {
+  border-color: #e74c3c;
+  background: #2a1a1a;
+  box-shadow: 0 0 24px rgba(231, 76, 60, 0.35);
+}
+
+.mic-icon {
+  font-size: 2rem;
+}
+
+.status {
+  margin: 0.75rem 0 0;
+  color: #8b98a8;
+  font-size: 0.9rem;
+}
+
+.card {
+  background: #1a2332;
+  border: 1px solid #2d3848;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.chips {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.chip.buy {
+  background: #1a3d2e;
+  color: #5dca8a;
+}
+
+.chip.sell {
+  background: #3d1a1a;
+  color: #e87c7c;
+}
+
+.chip.close {
+  background: #2d2a1a;
+  color: #d4b84a;
+}
+
+.hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #6b7a8c;
+}
+
+.transcript {
+  margin: 0;
+  font-size: 1.25rem;
+  min-height: 1.5rem;
+  color: #c5d0dc;
+}
+
+.log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+
+.log li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #2d3848;
+}
+
+.log li.ok {
+  color: #5dca8a;
+}
+
+.log li.error {
+  color: #e87c7c;
+}
+
+.log li.warn {
+  color: #d4b84a;
+}
+
+.manual-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+
+.btn.buy {
+  background: #2d7a52;
+}
+
+.btn.sell {
+  background: #a83232;
+}
+
+.btn.close {
+  background: #8a7324;
+}
