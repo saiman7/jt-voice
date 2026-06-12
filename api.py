@@ -2,20 +2,43 @@
 
 from __future__ import annotations
 
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 import trader
 
-STATIC_DIR = Path(__file__).resolve().parent / "static"
-ASSETS_DIR = STATIC_DIR / "assets"
 
+def _load_dotenv(path: Path) -> None:
+    if not path.is_file():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        if not key or key in os.environ:
+            continue
+        os.environ[key] = value.strip().strip('"').strip("'")
+
+
+_load_dotenv(Path(__file__).resolve().parent / ".env")
+
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", "8000"))
+
+
+def _parse_cors_origins(value: str) -> list[str]:
+    value = value.strip()
+    if value == "*":
+        return ["*"]
+    return [origin.strip() for origin in value.split(",") if origin.strip()]
 
 class TradeRequest(BaseModel):
     action: Literal["buy", "sell", "close"]
@@ -44,13 +67,17 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(title="Voice Trading Agent", lifespan=lifespan)
 
-if ASSETS_DIR.is_dir():
-    app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_parse_cors_origins(os.getenv("CORS_ORIGINS", "*")),
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
-async def index() -> FileResponse:
-    return FileResponse(STATIC_DIR / "index.html")
+async def root() -> dict:
+    return {"service": "Voice Trading Agent", "health": "/api/health", "docs": "/docs"}
 
 
 @app.get("/api/health")
@@ -102,7 +129,7 @@ async def execute_trade(request: TradeRequest) -> TradeResponse:
 def main() -> None:
     import uvicorn
 
-    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run("api:app", host=HOST, port=PORT, reload=False)
 
 
 if __name__ == "__main__":
